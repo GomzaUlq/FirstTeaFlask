@@ -1,0 +1,10 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+    <div class="about-content">
+        <h2>О нас</h2>
+        <p>{{ content|linebreaks }}</p>
+    </div>
+{% endblock %}
