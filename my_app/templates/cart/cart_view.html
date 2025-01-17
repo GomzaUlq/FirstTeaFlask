@@ -1,0 +1,30 @@
+{% extends "catalog/base.html" %}
+{% load custom_filtres %}
+
+{% block content %}
+<h1>Ваша корзина</h1>
+<ul>
+    {% with total_price=0 %}
+    {% for item in items %}
+        <li>
+            {{ item.product.name }} -
+            <form action="{% url 'update_cart_item' item.id %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="number" name="quantity" value="{{ item.quantity }}" min="1">
+                <button type="submit">Обновить</button>
+            </form>
+            - {{ item.product.price }}₽ x {{ item.quantity }} шт. = {{ item.product.price|multiply:item.quantity }}₽
+            {% with item_total=item.product.price|multiply:item.quantity %}
+                {% with total_price=total_price|add:item_total %}
+                    {% endwith %}
+                {% endwith %}
+            <a href="{% url 'remove_from_cart' item.id %}">Удалить</a>
+        </li>
+    {% endfor %}
+    {% endwith %}
+</ul>
+<h2>Итого: {{ total_price }}₽</h2>
+<a href="{% url 'checkout' %}"><button type="submit" class="btncart">Оформить заказ</button></a>
+{% endblock %}
+
+
